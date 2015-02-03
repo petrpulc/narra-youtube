@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors:
+# Authors: Petr Kubin
 #
 
 require 'narra/spi'
@@ -30,33 +30,28 @@ module Narra
       @description = 'Allows NARRA to connects to the YouTube sources'
 
       def self.valid?(url)
-        # Nothing to do
-        # This has to be overridden in descendants
+        # regular expression of youtube url - validation test
+        /^(http:\/\/|https:\/\/)?(www\.)?(youtube\.[A-Za-z\.]+|youtu.be\.)\/(watch\?v=)?[A-Za-z0-9\-_]{6,12}(&[A-Za-z0-9\-_]+)*=?.*$/.match(url)
       end
 
       def initialization
-        # Nothing to do
-        # This has to be overridden in descendants
+
       end
 
       def name
-        # Nothing to do
-        # This has to be overridden in descendants
+        # vybrat z youtube API nazev
       end
 
       def type
-        # Nothing to do
-        # This has to be overridden in descendants
+        'video'
       end
 
       def metadata
-        # Nothing to do
-        # This has to be overridden in descendants
+        # author, date, comment, views, likes, dislikes, category, licence
       end
 
       def download_url
-        # Nothing to do
-        # This has to be overridden in descendants
+        # předat url
       end
 
     end

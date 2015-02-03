@@ -36,4 +36,24 @@ describe Narra::Youtube::Connector do
     expect(Narra::Youtube::Connector.title).to match('NARRA YouTube Connector')
     expect(Narra::Youtube::Connector.description).to match('Allows NARRA to connects to the YouTube sources')
   end
+
+  it 'should validate url' do
+    expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=qM9f01YYDJ4')).to match(true)
+    expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?f=qM9f01YYDJ4')).to match(false)
+    expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=tDyeiePort0')).to match(true)
+    expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=tDyeiePort0&spfreload=10')).to match(true)
+    expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=qM9f01YYDJ4asdasdasdadasdasdasdasdaasdasdad')).to match(false) #redirect na spravnou
+    expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watchv=tDyeiePort0')).to match(false)
+    expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?vtDyeiePort0')).to match(false)
+    expect(Narra::Youtube::Connector.valid?('http://www.youtube.com/watch?v=tDyeiePort0')).to match(true)    #redirect https://
+    expect(Narra::Youtube::Connector.valid?('https:www.youtube.youtu.be.com/watch?v=tDyeiePort0')).to match(false)
+  end
+
+  it 'should validate type' do
+    expect(Narra::Youtube::Connector.valid?('video')).to match(true)
+    expect(Narra::Youtube::Connector.valid?('vimeo')).to match(false)
+    expect(Narra::Youtube::Connector.valid?('youtube')).to match(false)
+    expect(Narra::Youtube::Connector.valid?('exception')).to match(false)
+  end
+
 end
