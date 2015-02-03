@@ -54,6 +54,7 @@ describe Narra::Youtube::Connector do
     expect(Narra::Youtube::Connector.valid?('vimeo')).to match(false)
     expect(Narra::Youtube::Connector.valid?('youtube')).to match(false)
     expect(Narra::Youtube::Connector.valid?('exception')).to match(false)
+    expect(Narra::Youtube::Connector.valid?('http://www.youtube.com/watch?v=tDyeiePort0')).to match(false)
   end
 
 end
