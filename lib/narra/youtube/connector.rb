@@ -48,6 +48,14 @@ module Narra
 
       def metadata
         # author, date, comment, views, likes, dislikes, category, licence
+        @author=
+        @date=
+        @comment=
+        @views=
+        @likes=
+        @dislikes=
+        @category=
+        @licence=
       end
 
       def download_url
