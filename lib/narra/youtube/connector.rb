@@ -31,12 +31,10 @@ module Narra
 
       def self.valid?(url)
         # regular expression of youtube url - validation test
-        # todo opravit match za lepší
         !!(url =~ /^(http:\/\/|https:\/\/)?(www\.)?(youtube\.[A-Za-z\.]+|youtu.be\.)\/(watch\?v=)?[A-Za-z0-9\-_]{6,12}(&[A-Za-z0-9\-_]+)*=?.*$/)
       end
 
       def initialization(url)
-        # https://www.googleapis.com/youtube/v3/videos?id=eO_ZVzYJpyg&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet
         # vysekat pomocí RE video id a dát do proměnné
         pom = url.split('=')
         videoid = pom[1].split('&')

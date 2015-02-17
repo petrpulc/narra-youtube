@@ -57,4 +57,6 @@ describe Narra::Youtube::Connector do
     expect(Narra::Youtube::Connector.valid?('http://www.youtube.com/watch?v=tDyeiePort0')).to match(false)
   end
 
+  # todo how to validate rest of functions
+
 end
