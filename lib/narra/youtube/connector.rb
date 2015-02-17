@@ -57,15 +57,38 @@ module Narra
 
       def metadata
         # parse youtube_json_object with variables bellow
-        # author, date, comment, views, likes, dislikes, category, licence
+
+        #channelTitle
         pom = @youtube_json_object.split('"channelTitle": "')[1]
         @channelTitle = pom.split("\",")[0]
+        #id
+        pom = @youtube_json_object.split('"id": "')[1]
+        @id = pom.split("\",")[0]
+        #publishedAt
+        pom = @youtube_json_object.split('"publishedAt": "')[1]
+        @publishedAt = pom.split("\",")[0]
+        #description
+        pom = @youtube_json_object.split('"description": "')[1]
+        @description = pom.split("\",")[0]
+        #categoryId
+        pom = @youtube_json_object.split('"categoryId": "')[1]
+        @categoryId = pom.split("\",")[0]
+        #liveBroadcastContent
+        pom = @youtube_json_object.split('"liveBroadcastContent": "')[1]
+        @liveBroadcastContent = pom.split("\",")[0]
+
         @date=""
+
         @comment=""
+
         @views=""
+
         @likes=""
+
         @dislikes=""
+
         @category=""
+
         @licence=""
       end
 
