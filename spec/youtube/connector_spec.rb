@@ -50,7 +50,7 @@ describe Narra::Youtube::Connector do
   end
 
   it 'should validate type' do
-    expect(Narra::Youtube::Connector.valid?('video')).to match(true)
+    expect(Narra::Youtube::Connector.valid?('youtube#video')).to match(true)
     expect(Narra::Youtube::Connector.valid?('vimeo')).to match(false)
     expect(Narra::Youtube::Connector.valid?('youtube')).to match(false)
     expect(Narra::Youtube::Connector.valid?('exception')).to match(false)

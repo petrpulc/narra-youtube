@@ -41,20 +41,25 @@ module Narra
         pom = url.split('=')
         videoid = pom[1].split('&')
 
-        youtube_json_object = get 'https://www.googleapis.com/youtube/v3/videos?id=#{videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet'
+        @youtube_json_object = get 'https://www.googleapis.com/youtube/v3/videos?id=#{videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet'
+
       end
 
       def name
-        # vybrat z youtube API nazev
+        # jmeno video na youtube | title
+        pom = @youtube_json_object.split('"title": "')[1]
+        title = pom.split("\",")[0]
       end
 
       def type
-        'video'
+        'youtube#video'
       end
 
       def metadata
+        # parse youtube_json_object with variables bellow
         # author, date, comment, views, likes, dislikes, category, licence
-        @author=""
+        pom = @youtube_json_object.split('"channelTitle": "')[1]
+        @channelTitle = pom.split("\",")[0]
         @date=""
         @comment=""
         @views=""
