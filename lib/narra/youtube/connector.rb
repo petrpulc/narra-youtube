@@ -31,11 +31,17 @@ module Narra
 
       def self.valid?(url)
         # regular expression of youtube url - validation test
-        /^(http:\/\/|https:\/\/)?(www\.)?(youtube\.[A-Za-z\.]+|youtu.be\.)\/(watch\?v=)?[A-Za-z0-9\-_]{6,12}(&[A-Za-z0-9\-_]+)*=?.*$/.match(url)
+        # todo opravit match za lepší
+        !!(url =~ /^(http:\/\/|https:\/\/)?(www\.)?(youtube\.[A-Za-z\.]+|youtu.be\.)\/(watch\?v=)?[A-Za-z0-9\-_]{6,12}(&[A-Za-z0-9\-_]+)*=?.*$/)
       end
 
-      def initialization
+      def initialization(url)
+        # https://www.googleapis.com/youtube/v3/videos?id=eO_ZVzYJpyg&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet
+        # vysekat pomocí RE video id a dát do proměnné
+        pom = url.split('=')
+        videoid = pom[1].split('&')
 
+        youtube_json_object = get 'https://www.googleapis.com/youtube/v3/videos?id=#{videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet'
       end
 
       def name
@@ -48,18 +54,18 @@ module Narra
 
       def metadata
         # author, date, comment, views, likes, dislikes, category, licence
-        @author=
-        @date=
-        @comment=
-        @views=
-        @likes=
-        @dislikes=
-        @category=
-        @licence=
+        @author=""
+        @date=""
+        @comment=""
+        @views=""
+        @likes=""
+        @dislikes=""
+        @category=""
+        @licence=""
       end
 
       def download_url
-        # předat url
+        url
       end
 
     end
