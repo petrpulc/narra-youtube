@@ -46,7 +46,7 @@ module Narra
       def name
         # jmeno video na youtube | title
         pom = @youtube_json_object.split('"title": "')[1]
-        title = pom.split("\",")[0]
+        title = pom.split("\",\n")[0]   #todo doptat se na \n
       end
 
       def type
@@ -58,22 +58,22 @@ module Narra
 
         #channelTitle
         pom = @youtube_json_object.split('"channelTitle": "')[1]
-        @channelTitle = pom.split("\",")[0]
+        @channelTitle = pom.split("\",\n")[0]
         #id
         pom = @youtube_json_object.split('"id": "')[1]
-        @id = pom.split("\",")[0]
+        @id = pom.split("\",\n")[0]
         #publishedAt
         pom = @youtube_json_object.split('"publishedAt": "')[1]
-        @publishedAt = pom.split("\",")[0]
+        @publishedAt = pom.split("\",\n")[0]
         #description
         pom = @youtube_json_object.split('"description": "')[1]
-        @description = pom.split("\",")[0]
+        @description = pom.split("\",\n")[0]
         #categoryId
         pom = @youtube_json_object.split('"categoryId": "')[1]
-        @categoryId = pom.split("\",")[0]
+        @categoryId = pom.split("\",\n")[0]
         #liveBroadcastContent
         pom = @youtube_json_object.split('"liveBroadcastContent": "')[1]
-        @liveBroadcastContent = pom.split("\",")[0]
+        @liveBroadcastContent = pom.split("\",\n")[0]
 
         @date=""
 
