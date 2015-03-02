@@ -35,7 +35,7 @@ module Narra
       end
 
       def initialization(url)
-        # vysekat pomocí RE video id a dát do proměnné
+        # all description from YouTube API
         pom = url.split('=')
         videoid = pom[1].split('&')
 
@@ -50,7 +50,8 @@ module Narra
       end
 
       def type
-        'youtube#video'
+        pom = @youtube_json_object.split('"kind": "')[1]
+        type = pom.split("\",\n")[0]
       end
 
       def metadata
@@ -75,10 +76,6 @@ module Narra
         pom = @youtube_json_object.split('"liveBroadcastContent": "')[1]
         @liveBroadcastContent = pom.split("\",\n")[0]
 
-        @date=""
-
-        @comment=""
-
         @views=""
 
         @likes=""
@@ -88,6 +85,8 @@ module Narra
         @category=""
 
         @licence=""
+
+        metadata = Array[@channelTitle, @publishedAt, @description, @categoryId, @liveBroadcastContent]
       end
 
       def download_url

@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Narra Core. If not, see <http://www.gnu.org/licenses/>.
 #
-# Authors:
+# Authors: Petr Kubín
 #
 
 require 'spec_helper'
@@ -50,7 +50,7 @@ describe Narra::Youtube::Connector do
   end
 
   it 'should validate type' do
-    expect(Narra::Youtube::Connector.valid?('youtube#video')).to match(true)
+    expect(Narra::Youtube::Connector.valid?('youtube#videoListResponse')).to match(true)
     expect(Narra::Youtube::Connector.valid?('vimeo')).to match(false)
     expect(Narra::Youtube::Connector.valid?('youtube')).to match(false)
     expect(Narra::Youtube::Connector.valid?('exception')).to match(false)
