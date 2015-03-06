@@ -37,7 +37,7 @@ module Narra
       def initialization(url)
         # all description from YouTube API
         pom = url.split('=')
-        videoid = pom[1].split('&')
+        videoid = pom[1].split('&')[0]
 
         @youtube_json_object = get 'https://www.googleapis.com/youtube/v3/videos?id=#{videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet'
 
@@ -46,17 +46,20 @@ module Narra
       def name
         # jmeno video na youtube | title
         pom = @youtube_json_object.split('"title": "')[1]
-        title = pom.split("\",\n")[0]   #todo doptat se na \n
+        title = pom.split("\",\n")[0] 
       end
 
       def type
         pom = @youtube_json_object.split('"kind": "')[1]
-        type = pom.split("\",\n")[0]
+        type = pom.split("\",\n")[0].to_s
       end
 
       def metadata
         # parse youtube_json_object with variables bellow
 
+        #channelId
+        pom = @youtube_json_object.split('"channelId": "')[1]
+        @channelId = pom.split("\",\n")[0]
         #channelTitle
         pom = @youtube_json_object.split('"channelTitle": "')[1]
         @channelTitle = pom.split("\",\n")[0]
@@ -86,7 +89,7 @@ module Narra
 
         @licence=""
 
-        metadata = Array[@channelTitle, @publishedAt, @description, @categoryId, @liveBroadcastContent]
+        data = Array[@channelId,@channelTitle, @publishedAt, @description, @categoryId, @liveBroadcastContent]
       end
 
       def download_url
