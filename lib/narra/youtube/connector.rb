@@ -50,8 +50,7 @@ module Narra
       end
 
       def type
-        pom = @youtube_json_object.split('"kind": "')[1]
-        type = pom.split("\",\n")[0].to_s
+        :video
       end
 
       def metadata
