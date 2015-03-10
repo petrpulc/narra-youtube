@@ -39,8 +39,7 @@ module Narra
         pom = url.split('=')
         @videoid = pom[1].split('&')[0]
 
-        @youtube_json_object = get 'https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet'
-
+        @youtube_json_object = get 'https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet,statistics'
       end
 
       def name
@@ -77,18 +76,34 @@ module Narra
         #liveBroadcastContent
         pom = @youtube_json_object.split('"liveBroadcastContent": "')[1]
         @liveBroadcastContent = pom.split("\",\n")[0]
+        #viewCount
+        pom = @youtube_json_object.split('"viewCount": "')[1]
+        @viewCount = pom.split("\",\n")[0]
+        #likeCount
+        pom = @youtube_json_object.split('"likeCount": "')[1]
+        @likeCount = pom.split("\",\n")[0]
+        #dislikeCount
+        pom = @youtube_json_object.split('"dislikeCount": "')[1]
+        @dislikeCount = pom.split("\",\n")[0]
+        #favouriteCount
+        pom = @youtube_json_object.split('"favoriteCount": "')[1]
+        @favoriteCount = pom.split("\",\n")[0]
+        #commentCount
+        pom = @youtube_json_object.split('"commentCount": "')[1]
+        @commentCount = pom.split("\",\n")[0]
 
-        @views=""
-
-        @likes=""
-
-        @dislikes=""
-
-        @category=""
-
-        @licence=""
-
-        data = Array[@channelId,@channelTitle, @publishedAt, @description, @categoryId, @liveBroadcastContent]
+        data = Array[ {name:'channelId', value:'#{@channelId}',
+                      {name:'channelTitle', value:'#{@channelTitle}'},
+                      {name:'publishedAt', value:'#{@publishedAt}'},
+                      {name:'description', value:'#{@descriprion}'},
+                      {name:'categoryId', value:'#{@categoryId}'},
+                      {name:'liveBroadcastContent', value:'#{@liveBroadcastContent}'},
+                      {name:'viewCount', value:'#{@viewCount}'},
+                      {name:'likeCount', value:'#{@likeCount}'},
+                      {name:'dislikeCount', value:'#{@dislikeCount}'},
+                      {name:'favouriteCount', value:'#{@favouriteCount}'},
+                      {name:'commentCount', value:'#{@commentCount}'},
+                    ]
       end
 
       def download_url
