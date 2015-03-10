@@ -37,9 +37,9 @@ module Narra
       def initialization(url)
         # all description from YouTube API
         pom = url.split('=')
-        videoid = pom[1].split('&')[0]
+        @videoid = pom[1].split('&')[0]
 
-        @youtube_json_object = get 'https://www.googleapis.com/youtube/v3/videos?id=#{videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet'
+        @youtube_json_object = get 'https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet'
 
       end
 
@@ -93,7 +93,7 @@ module Narra
       end
 
       def download_url
-        url
+        "youtube.com/v/#{@videoid}"
       end
 
     end

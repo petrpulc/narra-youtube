@@ -64,14 +64,14 @@ end
 describe 'object_youtube_connector' do
 
   before(:each) do
-    @test1 = Narra::Youtube::Connector.new(https://www.youtube.com/watch?v=5IvlcZyjJvU)
-    @test2 = Narra::Youtube::Connector.new(https://www.youtube.com/watch?v=2ndeBBsQZqQ)
+    @test1 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=5IvlcZyjJvU")
+    @test2 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=2ndeBBsQZqQ")
   end
 
   it 'test top gear video test1' do
     expect(@test1.name).to match('Top Gear   Season 12 Episode 4 --  Series 12 Episode 4')
     expect(@test1.type).to match('youtube#videoListResponse')
-    expect(@test1.metadata).to be_instance_of(array)
+    expect(@test1.metadata).to be_instance_of(Array)
 
     #test channelId
     expect(@test1.metadata.data[0]).to match('UCsKSU2Og2vyMk-E6GgNH4-A')
@@ -91,7 +91,7 @@ describe 'object_youtube_connector' do
   it 'test Kanalgratis video test2' do
     expect(@test2.name).to match('Kanalgratis Live - Danish Record Pike 21,1 kg, 46lb 8oz - Interview with Finn Sloth Hansen')
     expect(@test2.type).to match('youtube#videoListResponse')
-    expect(@test2.metadata).to be_instance_of(array)
+    expect(@test2.metadata).to be_instance_of(Array)
 
     #test channelId
     expect(@test2.metadata.data[0]).to match('UCwTrHPEglCkDz54iSg9ss9Q')
