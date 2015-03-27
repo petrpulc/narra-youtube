@@ -36,15 +36,18 @@ module Narra
 
       def initialization(url)
         # all description from YouTube API
-        pom = url.split('=')
+        pom = url.split('v=')
         @videoid = pom[1].split('&')[0]
 
-        @youtube_json_object = get 'https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet,statistics'
+        @youtube_json_object_snippet = get 'https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet'
+        @youtube_json_object_statistics = get 'https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=statistics'
+        @youtube_json_object_contentDetails = get 'https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=contentDetails'
+
       end
 
       def name
         # jmeno video na youtube | title
-        pom = @youtube_json_object.split('"title": "')[1]
+        pom = @youtube_json_object_snippet.split('"title": "')[1]
         title = pom.split("\",\n")[0] 
       end
 
@@ -54,60 +57,75 @@ module Narra
 
       def metadata
         # parse youtube_json_object with variables bellow
-
         #channelId
-        pom = @youtube_json_object.split('"channelId": "')[1]
+        pom = @youtube_json_object_snippet.split('"channelId": "')[1]
         @channelId = pom.split("\",\n")[0]
         #channelTitle
-        pom = @youtube_json_object.split('"channelTitle": "')[1]
+        pom = @youtube_json_object_snippet.split('"channelTitle": "')[1]
         @channelTitle = pom.split("\",\n")[0]
         #id
-        pom = @youtube_json_object.split('"id": "')[1]
+        pom = @youtube_json_object_snippet.split('"id": "')[1]
         @id = pom.split("\",\n")[0]
         #publishedAt
-        pom = @youtube_json_object.split('"publishedAt": "')[1]
+        pom = @youtube_json_object_snippet.split('"publishedAt": "')[1]
         @publishedAt = pom.split("\",\n")[0]
         #description
-        pom = @youtube_json_object.split('"description": "')[1]
+        pom = @youtube_json_object_snippet.split('"description": "')[1]
         @description = pom.split("\",\n")[0]
         #categoryId
-        pom = @youtube_json_object.split('"categoryId": "')[1]
+        pom = @youtube_json_object_snippet.split('"categoryId": "')[1]
         @categoryId = pom.split("\",\n")[0]
         #liveBroadcastContent
-        pom = @youtube_json_object.split('"liveBroadcastContent": "')[1]
+        pom = @youtube_json_object_snippet.split('"liveBroadcastContent": "')[1]
         @liveBroadcastContent = pom.split("\",\n")[0]
         #viewCount
-        pom = @youtube_json_object.split('"viewCount": "')[1]
+        pom = @youtube_json_object_statistics.split('"viewCount": "')[1]
         @viewCount = pom.split("\",\n")[0]
         #likeCount
-        pom = @youtube_json_object.split('"likeCount": "')[1]
+        pom = @youtube_json_object_statistics.split('"likeCount": "')[1]
         @likeCount = pom.split("\",\n")[0]
         #dislikeCount
-        pom = @youtube_json_object.split('"dislikeCount": "')[1]
+        pom = @youtube_json_object_statistics.split('"dislikeCount": "')[1]
         @dislikeCount = pom.split("\",\n")[0]
         #favouriteCount
-        pom = @youtube_json_object.split('"favoriteCount": "')[1]
+        pom = @youtube_json_object_statistics.split('"favoriteCount": "')[1]
         @favoriteCount = pom.split("\",\n")[0]
         #commentCount
-        pom = @youtube_json_object.split('"commentCount": "')[1]
+        pom = @youtube_json_object_statistics.split('"commentCount": "')[1]
         @commentCount = pom.split("\",\n")[0]
+        #duration
+        pom = @youtube_json_object_contentDetails.split('"duration": ')[1]
+        @duration = pom.split("\",\n");
+        #dimension
+        pom = @youtube_json_object_contentDetails.split('"dimension": ')[1]
+        @dimension = pom.split("\",\n");
+        #definition
+        pom = @youtube_json_object_contentDetails.split('"definition": ')[1]
+        @definition = pom.split("\",\n");
+        #caption
+        pom = @youtube_json_object_contentDetails.split('"caption": ')[1]
+        @caption = pom.split("\",\n");
 
-        data = Array[ {name:'channelId', value:'#{@channelId}',
-                      {name:'channelTitle', value:'#{@channelTitle}'},
-                      {name:'publishedAt', value:'#{@publishedAt}'},
-                      {name:'description', value:'#{@descriprion}'},
-                      {name:'categoryId', value:'#{@categoryId}'},
-                      {name:'liveBroadcastContent', value:'#{@liveBroadcastContent}'},
-                      {name:'viewCount', value:'#{@viewCount}'},
-                      {name:'likeCount', value:'#{@likeCount}'},
-                      {name:'dislikeCount', value:'#{@dislikeCount}'},
-                      {name:'favouriteCount', value:'#{@favouriteCount}'},
-                      {name:'commentCount', value:'#{@commentCount}'},
+        data = Array[ {:name'channelId', :value'#{@channelId}'},
+                      {:name'channelTitle', :value'#{@channelTitle}'},
+                      {:name'publishedAt', :value'#{@publishedAt}'},
+                      {:name'description', :value'#{@descriprion}'},
+                      {:name'categoryId', :value'#{@categoryId}'},
+                      {:name'liveBroadcastContent', :value'#{@liveBroadcastContent}'},
+                      {:name'viewCount', :value'#{@viewCount}'},
+                      {:name'likeCount', :value'#{@likeCount}'},
+                      {:name'dislikeCount', :value'#{@dislikeCount}'},
+                      {:name'favouriteCount', :value'#{@favouriteCount}'},
+                      {:name'commentCount', :value'#{@commentCount}'},
+                      {:name'duration', :value'#{@duration}'},
+                      {:name'dimension', :value'#{@dimension}'},
+                      {:name'definition', :value'#{@definition}'},
+                      {:name'caption', :value'#{@caption}'}
                     ]
       end
 
       def download_url
-        "youtube.com/v/#{@videoid}"
+        "https://www.youtube.com/v/#{@videoid}"
       end
 
     end
