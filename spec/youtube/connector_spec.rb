@@ -34,7 +34,7 @@ describe Narra::Youtube::Connector do
   it 'should have accessible fields' do
     expect(Narra::Youtube::Connector.identifier).to match(:youtube)
     expect(Narra::Youtube::Connector.title).to match('NARRA YouTube Connector')
-    expect(Narra::Youtube::Connector.description).to match('Allows NARRA to connects to the YouTube sources')
+    expect(Narra::Youtube::Connector.self_description).to match('Allows NARRA to connects to the YouTube sources')
   end
 
   it 'should validate url' do
@@ -66,6 +66,12 @@ describe 'object_youtube_connector' do
   before(:each) do
     @test1 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=5IvlcZyjJvU")
     @test2 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=2ndeBBsQZqQ")
+    # jak z  {name:'channelId', value:'#{@channelId}'},
+    # udělat {'channelId'=>'#{@channelId}'}               data.each
+    @data = {}
+    @data1 = {}
+    @test1.metadata.each { |i| @data[i[:name]] = i[:value] }
+    @test2.metadata.each { |i| @data1[i[:name]] = i[:value] }
   end
 
   it 'test top gear video test1' do
@@ -74,17 +80,35 @@ describe 'object_youtube_connector' do
     expect(@test1.metadata).to be_instance_of(Array)
 
     #test channelId
-    expect(@test1.metadata.data[0]).to match('UCsKSU2Og2vyMk-E6GgNH4-A')
+    expect(@data['channelId']).to match('UCsKSU2Og2vyMk-E6GgNH4-A') ## pak to testovat takhle !!!!!!!!!
     #test channelTitle
-    expect(@test1.metadata.data[1]).to match('Top Gear 12 Full HD')
+    expect(@data['channelTitle']).to match('Top Gear 12 Full HD')
     #test publishedAt
-    expect(@test1.metadata.data[2]).to match('2015-02-01T21:45:24.000Z')
+    expect(@data['publishedAt']).to match('2015-02-01T21:45:24.000Z')
     #test description
-    expect(@test1.metadata.data[3]).to match('Tags:\nTop Gear   Season 12 Episode 4 --  Series 12 Episode 4\nTop Gear   Season 12 Full HD\n================================================Top Gear is a British television series about motor vehicles, primarily cars, and is the most widely watched factual television programme in the world.[2] It began in 1977 as a conventional motoring magazine programme. Over time, and especially since a relaunch in 2002, it has developed a quirky, humorous and sometimes controversial[3][4] style. The programme is currently presented by Jeremy Clarkson, Richard Hammond and James May, and has featured at least three different test drivers known as The Stig. The programme is estimated to have around 350 million views per week in 170 different countries.')
+    expect(@data['description']).to match('Tags:\nTop Gear   Season 12 Episode 4 --  Series 12 Episode 4\nTop Gear   Season 12 Full HD\n================================================Top Gear is a British television series about motor vehicles, primarily cars, and is the most widely watched factual television programme in the world.[2] It began in 1977 as a conventional motoring magazine programme. Over time, and especially since a relaunch in 2002, it has developed a quirky, humorous and sometimes controversial[3][4] style. The programme is currently presented by Jeremy Clarkson, Richard Hammond and James May, and has featured at least three different test drivers known as The Stig. The programme is estimated to have around 350 million views per week in 170 different countries.')
     #test categoryId
-    expect(@test1.metadata.data[4]).to match('1')
+    expect(@data['categoryId']).to match('1')
     #test liveBroadcastContent
-    expect(@test1.metadata.data[5]).to match('none')
+    expect(@data['liveBroadcastContent']).to match('none')
+    #test viewCount
+    expect(@data['viewCount']).to match('45459')
+    #test likeCount
+    expect(@data['likeCount']).to match('111')
+    #test dislikeCount
+    expect(@data['dislikeCount']).to match('7')
+    #test favouriteCount
+    expect(@data['favouriteCount']).to match('0')
+    #test commentCount
+    expect(@data['commentCount']).to match('6')
+    #test duration
+    expect(@data['duration']).to match('PT1H5M47S')
+    #test dimension
+    expect(@data['dimension']).to match('3d')
+    #test definition
+    expect(@data['definition']).to match('hd')
+    #test caption
+    expect(@data['caption']).to match('false')
   end
 
 
@@ -94,17 +118,17 @@ describe 'object_youtube_connector' do
     expect(@test2.metadata).to be_instance_of(Array)
 
     #test channelId
-    expect(@test2.metadata.data[0]).to match('UCwTrHPEglCkDz54iSg9ss9Q')
+    expect(@data1['channelId']).to match('UCwTrHPEglCkDz54iSg9ss9Q')
     #test channelTitle
-    expect(@test2.metadata.data[1]).to match('kanalgratisdotse')
+    expect(@data1['channelTitle']).to match('kanalgratisdotse')
     #test publishedAt
-    expect(@test2.metadata.data[2]).to match('2015-03-02T20:13:23.000Z')
+    expect(@data1['publishedAt']).to match('2015-03-02T20:13:23.000Z')
     #test description
-    expect(@test2.metadata.data[3]).to match('')
+    expect(@data1['description']).to match('')
     #test categoryId
-    expect(@test2.metadata.data[4]).to match('17')
+    expect(@data1['categoryId']).to match('17')
     #test liveBroadcastContent
-    expect(@test2.metadata.data[5]).to match('none')
+    expect(@data1['liveBroadcastContent']).to match('none')
   end
 
 end

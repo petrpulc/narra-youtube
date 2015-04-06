@@ -27,7 +27,7 @@ module Narra
 
       @identifier = :youtube
       @title = 'NARRA YouTube Connector'
-      @description = 'Allows NARRA to connects to the YouTube sources'
+      @self_description = 'Allows NARRA to connects to the YouTube sources'
 
       def self.valid?(url)
         # regular expression of youtube url - validation test
@@ -39,88 +39,87 @@ module Narra
         pom = url.split('v=')
         @videoid = pom[1].split('&')[0]
 
-        @youtube_json_object_snippet = get 'https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet'
-        @youtube_json_object_statistics = get 'https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=statistics'
-        @youtube_json_object_contentDetails = get 'https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=contentDetails'
+        @youtube = get 'https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet,statistics,contentDetails'
 
       end
 
       def name
         # jmeno video na youtube | title
-        pom = @youtube_json_object_snippet.split('"title": "')[1]
-        title = pom.split("\",\n")[0] 
+        pom = @youtube.split('"title": "')[1]
+        @name = pom.split("\",\n")[0]
       end
 
       def type
         :video
       end
 
+      # zeptat se na přetížení methody a parametrizaci
       def metadata
         # parse youtube_json_object with variables bellow
         #channelId
-        pom = @youtube_json_object_snippet.split('"channelId": "')[1]
+        pom = @youtube.split('"channelId": "')[1]
         @channelId = pom.split("\",\n")[0]
         #channelTitle
-        pom = @youtube_json_object_snippet.split('"channelTitle": "')[1]
+        pom = @youtube.split('"channelTitle": "')[1]
         @channelTitle = pom.split("\",\n")[0]
         #id
-        pom = @youtube_json_object_snippet.split('"id": "')[1]
+        pom = @youtube.split('"id": "')[1]
         @id = pom.split("\",\n")[0]
         #publishedAt
-        pom = @youtube_json_object_snippet.split('"publishedAt": "')[1]
+        pom = @youtube.split('"publishedAt": "')[1]
         @publishedAt = pom.split("\",\n")[0]
         #description
-        pom = @youtube_json_object_snippet.split('"description": "')[1]
+        pom = @youtube.split('"description": "')[1]
         @description = pom.split("\",\n")[0]
         #categoryId
-        pom = @youtube_json_object_snippet.split('"categoryId": "')[1]
+        pom = @youtube.split('"categoryId": "')[1]
         @categoryId = pom.split("\",\n")[0]
         #liveBroadcastContent
-        pom = @youtube_json_object_snippet.split('"liveBroadcastContent": "')[1]
+        pom = @youtube.split('"liveBroadcastContent": "')[1]
         @liveBroadcastContent = pom.split("\",\n")[0]
         #viewCount
-        pom = @youtube_json_object_statistics.split('"viewCount": "')[1]
+        pom = @youtube.split('"viewCount": "')[1]
         @viewCount = pom.split("\",\n")[0]
         #likeCount
-        pom = @youtube_json_object_statistics.split('"likeCount": "')[1]
+        pom = @youtube.split('"likeCount": "')[1]
         @likeCount = pom.split("\",\n")[0]
         #dislikeCount
-        pom = @youtube_json_object_statistics.split('"dislikeCount": "')[1]
+        pom = @youtube.split('"dislikeCount": "')[1]
         @dislikeCount = pom.split("\",\n")[0]
         #favouriteCount
-        pom = @youtube_json_object_statistics.split('"favoriteCount": "')[1]
+        pom = @youtube.split('"favoriteCount": "')[1]
         @favoriteCount = pom.split("\",\n")[0]
         #commentCount
-        pom = @youtube_json_object_statistics.split('"commentCount": "')[1]
-        @commentCount = pom.split("\",\n")[0]
+        pom = @youtube.split('"commentCount": "')[1]
+        @commentCount = pom.split("\"\n")[0]
         #duration
-        pom = @youtube_json_object_contentDetails.split('"duration": ')[1]
-        @duration = pom.split("\",\n");
+        pom = @youtube.split('"duration": "')[1]
+        @duration = pom.split("\",\n")[0]
         #dimension
-        pom = @youtube_json_object_contentDetails.split('"dimension": ')[1]
-        @dimension = pom.split("\",\n");
+        pom = @youtube.split('"dimension": "')[1]
+        @dimension = pom.split("\",\n")[0]
         #definition
-        pom = @youtube_json_object_contentDetails.split('"definition": ')[1]
-        @definition = pom.split("\",\n");
+        pom = @youtube.split('"definition": "')[1]
+        @definition = pom.split("\",\n")[0]
         #caption
-        pom = @youtube_json_object_contentDetails.split('"caption": ')[1]
-        @caption = pom.split("\",\n");
+        pom = @youtube.split('"caption": "')[1]
+        @caption = pom.split("\",\n")[0]
 
-        data = Array[ {:name'channelId', :value'#{@channelId}'},
-                      {:name'channelTitle', :value'#{@channelTitle}'},
-                      {:name'publishedAt', :value'#{@publishedAt}'},
-                      {:name'description', :value'#{@descriprion}'},
-                      {:name'categoryId', :value'#{@categoryId}'},
-                      {:name'liveBroadcastContent', :value'#{@liveBroadcastContent}'},
-                      {:name'viewCount', :value'#{@viewCount}'},
-                      {:name'likeCount', :value'#{@likeCount}'},
-                      {:name'dislikeCount', :value'#{@dislikeCount}'},
-                      {:name'favouriteCount', :value'#{@favouriteCount}'},
-                      {:name'commentCount', :value'#{@commentCount}'},
-                      {:name'duration', :value'#{@duration}'},
-                      {:name'dimension', :value'#{@dimension}'},
-                      {:name'definition', :value'#{@definition}'},
-                      {:name'caption', :value'#{@caption}'}
+        data = Array[ {name:'channelId', value:'#{@channelId}'},
+                      {name:'channelTitle', value:'#{@channelTitle}'},
+                      {name:'publishedAt', value:'#{@publishedAt}'},
+                      {name:'description', value:'#{@descriprion}'},
+                      {name:'categoryId', value:'#{@categoryId}'},
+                      {name:'liveBroadcastContent', value:'#{@liveBroadcastContent}'},
+                      {name:'viewCount', value:'#{@viewCount}'},
+                      {name:'likeCount', value:'#{@likeCount}'},
+                      {name:'dislikeCount', value:'#{@dislikeCount}'},
+                      {name:'favouriteCount', value:'#{@favouriteCount}'},
+                      {name:'commentCount', value:'#{@commentCount}'},
+                      {name:'duration', value:'#{@duration}'},
+                      {name:'dimension', value:'#{@dimension}'},
+                      {name:'definition', value:'#{@definition}'},
+                      {name:'caption', value:'#{@caption}'}
                     ]
       end
 
