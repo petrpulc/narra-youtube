@@ -28,15 +28,28 @@ module Narra
   module Youtube
     class Connector < Narra::SPI::Connector
 
+      # basic init
+      # params: none
       @identifier = :youtube
       @title = 'NARRA YouTube Connector'
       @description = 'Allows NARRA to connects to the YouTube sources'
 
+      # validation
+      # params: url (string)
+      # returns bool value ( true / false )
       def self.valid?(url)
         # regular expression of youtube url - validation test
-        !!(url =~ /^(http:\/\/|https:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/(embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){6,11})(?:\S+)?$/)
+        valid = !!(url =~ /^(http:\/\/|https:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/(embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){6,11})(?:\S+)?$/)
+
+        # redirection
+
+
+        valid || redirect
       end
 
+      # initialize
+      # params: url (string)
+      # returns @youtube (json object)
       def initialize(url)
         # all description from YouTube API
         pom = url.split('v=')
@@ -46,17 +59,25 @@ module Narra
 
       end
 
+      # name
+      # params: none
+      # returns name of video
       def name
         # jmeno video na youtube | title
         my_hash = JSON.parse(@youtube)
         my_hash["items"][0]["snippet"]["title"]
       end
 
+      # type
+      # params: none
+      # returns :video
       def type
         :video
       end
 
-      # Method to return metadata as map
+      # metadata
+      # params: none
+      # returns Array
       def metadata
         my_hash = JSON.parse(@youtube)
         #channelId
@@ -110,6 +131,9 @@ module Narra
         ]
       end
 
+      # download_url
+      # params: none; must be called after valid? and initialize
+      # returns URL for video stream
       def download_url
         "https://www.youtube.com/v/#{@videoid}"
       end
