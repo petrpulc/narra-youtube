@@ -40,13 +40,14 @@ describe Narra::Youtube::Connector do
   it 'should validate url' do
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=qM9f01YYDJ4')).to match(true)
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?f=qM9f01YYDJ4')).to match(false)
-    expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=tDyeiePort0')).to match(true)
+    expect(Narra::Youtube::Connector.valid?('www.youtube.com/watch?v=tDyeiePort0')).to match(true)
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=tDyeiePort0&spfreload=10')).to match(true)
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=qM9f01YYDJ4asdasdasdadasdasdasdasdaasdasdad')).to match(true) #redirect na spravnou
-    expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watchv=tDyeiePort0')).to match(false)
+    expect(Narra::Youtube::Connector.valid?('www.youtube.com/watchv=tDyeiePort0')).to match(false)
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?vtDyeiePort0')).to match(false)
     expect(Narra::Youtube::Connector.valid?('http://www.youtube.com/watch?v=tDyeiePort0')).to match(true)    #redirect https://
     expect(Narra::Youtube::Connector.valid?('https:www.youtube.youtu.be.com/watch?v=tDyeiePort0')).to match(false)
+    expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=2gz3DSiSymE&feature=iv&src_vid=VxlQ2gqiZ7k&annotation_id=annotation_620965849')).to match(true)
   end
 end
 
@@ -57,14 +58,17 @@ describe 'object_youtube_connector' do
     @test1 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=5IvlcZyjJvU")
     @test2 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=2ndeBBsQZqQ")
     @test3 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=U0jH2-VF00Y")
+    @test4 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=2gz3DSiSymE&feature=iv&src_vid=VxlQ2gqiZ7k&annotation_id=annotation_620965849")
     # jak z  {name:'channelId', value:'#{@channelId}'},
     # udělat {'channelId'=>'#{@channelId}'}
     @data = {}
     @data1 = {}
     @data2 = {}
+    @data3 = {}
     @test1.metadata.each { |i| @data[i[:name]] = i[:value] }
     @test2.metadata.each { |i| @data1[i[:name]] = i[:value] }
     @test3.metadata.each { |i| @data2[i[:name]] = i[:value] }
+    @test4.metadata.each { |i| @data3[i[:name]] = i[:value] }
   end
 
   it 'test top gear video test1' do
@@ -85,7 +89,7 @@ describe 'object_youtube_connector' do
     #test liveBroadcastContent
     expect(@data['liveBroadcastContent']).to match('none')
     #test viewCount
-    expect(@data['viewCount']).to match('50277')
+    expect(@data['viewCount']).to match('50350')
     #test likeCount
     expect(@data['likeCount']).to match('120')
     #test dislikeCount
@@ -123,28 +127,65 @@ describe 'object_youtube_connector' do
     #test liveBroadcastContent
     expect(@data1['liveBroadcastContent']).to match('none')
     #test viewCount
-    expect(@data['viewCount']).to match('50277')
+    expect(@data1['viewCount']).to match('9609')
     #test likeCount
-    expect(@data['likeCount']).to match('120')
+    expect(@data1['likeCount']).to match('84')
     #test dislikeCount
-    expect(@data['dislikeCount']).to match('8')
+    expect(@data1['dislikeCount']).to match('17')
     #test favouriteCount
-    expect(@data['favouriteCount']).to match('')
+    expect(@data1['favouriteCount']).to match('')
     #test commentCount
-    expect(@data['commentCount']).to match('7')
+    expect(@data1['commentCount']).to match('935')
     #test duration
-    expect(@data['duration']).to match('PT1H5M47S')
+    expect(@data1['duration']).to match('PT1H3M')
     #test dimension
-    expect(@data['dimension']).to match('3d')
+    expect(@data1['dimension']).to match('2d')
     #test definition
-    expect(@data['definition']).to match('hd')
+    expect(@data1['definition']).to match('hd')
     #test caption
-    expect(@data['caption']).to match('false')
+    expect(@data1['caption']).to match('false')
   end
 
   it 'test description' do
     expect(@data2['description']).to match('I do not own this video. Nevlastním toto video. Majitel je TV Nova.')
   end
 
+
+  it 'test Kanalgratis video test2' do
+    expect(@test4.name).to match('Kawasaki zx-10r vs Honda cbr 1000 rr | RAW VIDEO" to match "Kanalgratis Live - Danish Record Pike 21,1 kg, 46lb 8oz - Interview with Finn Sloth Hansen')
+    expect(@test4.type).to match(:video)
+    expect(@test4.metadata).to be_instance_of(Array)
+
+    #test channelId
+    expect(@data3['channelId']).to match('UCIlh_cFLNl_Q4xQtZ2cSKmg')
+    #test channelTitle
+    expect(@data3['channelTitle']).to match('Meddesuncut')
+    #test publishedAt
+    expect(@data3['publishedAt']).to match('2014-08-15T11:53:20.000Z')
+    #test description
+    expect(@data3['description']).to match('Some RAW footage of us, just me and Stoffel up the hill.')
+    #test categoryId
+    expect(@data3['categoryId']).to match('2')
+    #test liveBroadcastContent
+    expect(@data3['liveBroadcastContent']).to match('none')
+    #test viewCount
+    expect(@data3['viewCount']).to match('13223')
+    #test likeCount
+    expect(@data3['likeCount']).to match('270')
+    #test dislikeCount
+    expect(@data3['dislikeCount']).to match('4')
+    #test favouriteCount
+    expect(@data3['favouriteCount']).to match('')
+    #test commentCount
+    expect(@data3['commentCount']).to match('22')
+    #test duration
+    expect(@data3['duration']).to match('PT1M33S')
+    #test dimension
+    expect(@data3['dimension']).to match('2d')
+    #test definition
+    expect(@data3['definition']).to match('hd')
+    #test caption
+    expect(@data3['caption']).to match('false')
+  end
 end
 

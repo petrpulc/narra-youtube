@@ -39,12 +39,23 @@ module Narra
       # returns bool value ( true / false )
       def self.valid?(url)
         # regular expression of youtube url - validation test
-        valid = !!(url =~ /^(http:\/\/|https:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/(embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){6,11})(?:\S+)?$/)
+        valid = !!(url =~ /^(?:http:\/\/|https:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){6,11})(\S*)?$/)
 
         # redirection
+        #max = 100
+        #i = 0
 
+        #while i < max  do
+          # try redirect
+         # redirectedUrl = 0 # request here
+         # break if url =~ redirectedUrl   # možná to bude chtít @ zeptat !!!!!!!!!!!!!!!!!!!!
+         # url = redirectedUrl
+         # $i += 1
+        #end
 
-        valid || redirect
+        #redirect = !!(redirectedUrl =~ /^(http:\/\/|https:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/(embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){6,11})(?:\S+)?$/)
+
+        valid #|| redirect
       end
 
       # initialize
