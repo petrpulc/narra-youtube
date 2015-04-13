@@ -55,7 +55,7 @@ end
 describe 'object_youtube_connector' do
 
   before(:each) do
-    @test1 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=5IvlcZyjJvU")
+    @test1 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=x4NuGigXSmw")
     @test2 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=2ndeBBsQZqQ")
     @test3 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=U0jH2-VF00Y")
     @test4 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=2gz3DSiSymE&feature=iv&src_vid=VxlQ2gqiZ7k&annotation_id=annotation_620965849")
@@ -71,37 +71,37 @@ describe 'object_youtube_connector' do
     @test4.metadata.each { |i| @data3[i[:name]] = i[:value] }
   end
 
-  it 'test top gear video test1' do
-    expect(@test1.name).to match('Top Gear   Season 12 Episode 4 --  Series 12 Episode 4')
+  it 'test mrk video test1' do
+    expect(@test1.name).to match('Zimní montáže - 1. díl')
     expect(@test1.type).to match(:video)
     expect(@test1.metadata).to be_instance_of(Array)
 
     #test channelId
-    expect(@data['channelId']).to match('UCsKSU2Og2vyMk-E6GgNH4-A')
+    expect(@data['channelId']).to match('UCKfMsmWq9cPBAuFLlff-rCA')
     #test channelTitle
-    expect(@data['channelTitle']).to match('Top Gear 12 Full HD')
+    expect(@data['channelTitle']).to match('www.MRK.cz')
     #test publishedAt
-    expect(@data['publishedAt']).to match('2015-02-01T21:45:24.000Z')
+    expect(@data['publishedAt']).to match('2013-03-04T08:17:31.000Z')
     #test description
-    expect(@data['description']).to match("Tags:\nTop Gear   Season 12 Episode 4 --  Series 12 Episode 4\nTop Gear   Season 12 Full HD\n================================================Top Gear is a British television series about motor vehicles, primarily cars, and is the most widely watched factual television programme in the world.[2] It began in 1977 as a conventional motoring magazine programme. Over time, and especially since a relaunch in 2002, it has developed a quirky, humorous and sometimes controversial[3][4] style. The programme is currently presented by Jeremy Clarkson, Richard Hammond and James May, and has featured at least three different test drivers known as The Stig. The programme is estimated to have around 350 million views per week in 170 different countries.")
+    expect(@data['description']).to match('Rybaření s feederem v zimním stylu předvede Martin Maťák.\nVíce našich rybářských videí najdete na www.mrk.cz')
     #test categoryId
     expect(@data['categoryId']).to match('1')
     #test liveBroadcastContent
     expect(@data['liveBroadcastContent']).to match('none')
     #test viewCount
-    expect(@data['viewCount']).to match('50350')
+    expect(@data['viewCount']).to match('85571')
     #test likeCount
-    expect(@data['likeCount']).to match('120')
+    expect(@data['likeCount']).to match('113')
     #test dislikeCount
-    expect(@data['dislikeCount']).to match('8')
+    expect(@data['dislikeCount']).to match('13')
     #test favouriteCount
     expect(@data['favouriteCount']).to match('')
     #test commentCount
     expect(@data['commentCount']).to match('7')
     #test duration
-    expect(@data['duration']).to match('PT1H5M47S')
+    expect(@data['duration']).to match('PT24M41S')
     #test dimension
-    expect(@data['dimension']).to match('3d')
+    expect(@data['dimension']).to match('2d')
     #test definition
     expect(@data['definition']).to match('hd')
     #test caption
@@ -127,7 +127,7 @@ describe 'object_youtube_connector' do
     #test liveBroadcastContent
     expect(@data1['liveBroadcastContent']).to match('none')
     #test viewCount
-    expect(@data1['viewCount']).to match('9609')
+    expect(@data1['viewCount']).to match('9622')
     #test likeCount
     expect(@data1['likeCount']).to match('84')
     #test dislikeCount
@@ -151,7 +151,7 @@ describe 'object_youtube_connector' do
   end
 
 
-  it 'test Kanalgratis video test2' do
+  it 'test Meddesuncut video test3' do
     expect(@test4.name).to match('Kawasaki zx-10r vs Honda cbr 1000 rr | RAW VIDEO" to match "Kanalgratis Live - Danish Record Pike 21,1 kg, 46lb 8oz - Interview with Finn Sloth Hansen')
     expect(@test4.type).to match(:video)
     expect(@test4.metadata).to be_instance_of(Array)
@@ -169,9 +169,9 @@ describe 'object_youtube_connector' do
     #test liveBroadcastContent
     expect(@data3['liveBroadcastContent']).to match('none')
     #test viewCount
-    expect(@data3['viewCount']).to match('13223')
+    expect(@data3['viewCount']).to match('13296')
     #test likeCount
-    expect(@data3['likeCount']).to match('270')
+    expect(@data3['likeCount']).to match('274')
     #test dislikeCount
     expect(@data3['dislikeCount']).to match('4')
     #test favouriteCount

@@ -21,8 +21,9 @@
 
 require 'narra/core'
 require 'net/http'
-require 'rubygems'
+#require 'rubygems'
 require 'json'
+#require 'uri'
 
 module Narra
   module Youtube
@@ -34,28 +35,36 @@ module Narra
       @title = 'NARRA YouTube Connector'
       @description = 'Allows NARRA to connects to the YouTube sources'
 
+      # redirection test
+      # params: uri_str (string), limit fixed to 20
+      # returns new url with 200 status or ArgumentError
+      # source: http://docs.ruby-lang.org/en/2.0.0/Net/HTTP.html
+      def fetch(uri_str, limit = 20)
+        raise ArgumentError, 'too many HTTP redirects' if limit == 0
+        response = Net::HTTP.get_response(URI(uri_str))
+        case response
+          when Net::HTTPSuccess then
+            response
+          when Net::HTTPRedirection then
+            location = response['location']
+            warn "redirected to #{location}"
+            fetch(location, limit - 1)
+          else
+            response.value
+        end
+        location
+      end
+
       # validation
       # params: url (string)
       # returns bool value ( true / false )
       def self.valid?(url)
         # regular expression of youtube url - validation test
         valid = !!(url =~ /^(?:http:\/\/|https:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){6,11})(\S*)?$/)
-
-        # redirection
-        #max = 100
-        #i = 0
-
-        #while i < max  do
-          # try redirect
-         # redirectedUrl = 0 # request here
-         # break if url =~ redirectedUrl   # možná to bude chtít @ zeptat !!!!!!!!!!!!!!!!!!!!
-         # url = redirectedUrl
-         # $i += 1
-        #end
-
-        #redirect = !!(redirectedUrl =~ /^(http:\/\/|https:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/(embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){6,11})(?:\S+)?$/)
-
-        valid #|| redirect
+        # doptat se na volání protože to nebude fungovat s self.
+        redirectedUrl = fetch(url)
+        redirect = !!(redirectedUrl =~ /^(?:http:\/\/|https:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){6,11})(\S*)?$/)
+        valid || redirect
       end
 
       # initialize
@@ -67,7 +76,6 @@ module Narra
         @videoid = pom[1].split('&')[0]
         uri = URI("https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet,statistics,contentDetails,status")
         @youtube = Net::HTTP.get(uri)
-
       end
 
       # name
