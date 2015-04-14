@@ -44,10 +44,10 @@ describe Narra::Youtube::Connector do
     expect(Narra::Youtube::Connector.valid?('www.youtube.com/watch?v=tDyeiePort0')).to match(true)
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=tDyeiePort0&spfreload=10')).to match(true)
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=qM9f01YYDJ4asdasdasdadasdasdasdasdaasdasdad')).to match(true) #redirect na spravnou
-    expect(Narra::Youtube::Connector.valid?('www.youtube.com/watchv=tDyeiePort0')).to match(false)
+    expect { Narra::Youtube::Connector.valid?('www.youtube.com/watchv=tDyeiePort0') }.to raise_error
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?vtDyeiePort0')).to match(false)
     expect(Narra::Youtube::Connector.valid?('http://www.youtube.com/watch?v=tDyeiePort0')).to match(true)    #redirect https://
-    expect(Narra::Youtube::Connector.valid?('https:www.youtube.youtu.be.com/watch?v=tDyeiePort0')).to match(false)
+    expect {Narra::Youtube::Connector.valid?('https:www.youtube.youtu.be.com/watch?v=tDyeiePort0')}.to raise_error
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=2gz3DSiSymE&feature=iv&src_vid=VxlQ2gqiZ7k&annotation_id=annotation_620965849')).to match(true)
   end
 
@@ -177,13 +177,13 @@ describe 'object_youtube_connector' do
     #test viewCount
     #expect(@data3['viewCount']).to match('13302')
     #test likeCount
-    expect(@data3['likeCount']).to match('275')
+    expect(@data3['likeCount']).to match('277')
     #test dislikeCount
     expect(@data3['dislikeCount']).to match('4')
     #test favouriteCount
     expect(@data3['favouriteCount']).to match('')
     #test commentCount
-    expect(@data3['commentCount']).to match('22')
+    expect(@data3['commentCount']).to match('23')
     #test duration
     expect(@data3['duration']).to match('PT1M33S')
     #test dimension

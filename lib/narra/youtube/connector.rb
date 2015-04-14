@@ -44,11 +44,14 @@ module Narra
         # vytvořit pole
         redirect_history = []
         # nekonečkou smyčku
+        unless uri_str.start_with?('http://','https://')
+          uri_str.prepend('http://')
+        end
         for i in 0..limit
-          return uri_str if uri_str in redirect_history
+          return uri_str if redirect_history.include? uri_str
           response = Net::HTTP.get_response(URI(uri_str))
-          return uri_str if response == Net::HTTPSuccess
-          raise StandardError, 'Error code between 4xx and 5xx' if response != Net::HTTPRedirection
+          return uri_str if response.is_a? Net::HTTPSuccess
+          raise StandardError, 'Error code between 4xx and 5xx' unless response.is_a? Net::HTTPRedirection
           redirect_history << uri_str
           uri_str = response['location']
         end
@@ -59,6 +62,12 @@ module Narra
       # returns bool value ( true / false )
       def self.valid?(url)
         url = fetch(url)
+      rescue ArgumentError => a
+        raise ArgumentError, 'Invalid url passed'
+      rescue StandardError => e
+        raise StandardError, 'Error code between 4xx and 5xx'
+      else
+        # this runs only when no exception was raised
         # regular expression of youtube url - validation test
         !!(url =~ /^(?:http:\/\/|https:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){6,11})(\S*)?$/)
       end
@@ -68,8 +77,7 @@ module Narra
       # returns @youtube (json object)
       def initialize(url)
         # all description from YouTube API
-        url = self.fetch(url)
-        url = self.fetch(url)
+        url = self.class.fetch(url)
         pom = url.split('v=')
         @videoid = pom[1].split('&')[0]
         uri = URI("https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet,statistics,contentDetails,status")
