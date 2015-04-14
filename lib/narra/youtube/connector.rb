@@ -21,12 +21,11 @@
 
 require 'narra/core'
 require 'net/http'
-#require 'rubygems'
 require 'json'
-#require 'uri'
 
 module Narra
   module Youtube
+
     class Connector < Narra::SPI::Connector
 
       # basic init
@@ -38,33 +37,30 @@ module Narra
       # redirection test
       # params: uri_str (string), limit fixed to 20
       # returns new url with 200 status or ArgumentError
-      # source: http://docs.ruby-lang.org/en/2.0.0/Net/HTTP.html
-      def fetch(uri_str, limit = 20)
+      def self.fetch(uri_str, limit = 20)
+        # You should choose a better exception.
         raise ArgumentError, 'too many HTTP redirects' if limit == 0
-        response = Net::HTTP.get_response(URI(uri_str))
-        case response
-          when Net::HTTPSuccess then
-            response
-          when Net::HTTPRedirection then
-            location = response['location']
-            warn "redirected to #{location}"
-            fetch(location, limit - 1)
-          else
-            response.value
+        raise ArgumentError, 'Invalid url passed' if uri_str.nil?
+        # vytvořit pole
+        redirect_history = []
+        # nekonečkou smyčku
+        for i in 0..limit
+          return uri_str if uri_str in redirect_history
+          response = Net::HTTP.get_response(URI(uri_str))
+          return uri_str if response == Net::HTTPSuccess
+          raise StandardError, 'Error code between 4xx and 5xx' if response != Net::HTTPRedirection
+          redirect_history << uri_str
+          uri_str = response['location']
         end
-        location
       end
 
       # validation
       # params: url (string)
       # returns bool value ( true / false )
       def self.valid?(url)
+        url = fetch(url)
         # regular expression of youtube url - validation test
-        valid = !!(url =~ /^(?:http:\/\/|https:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){6,11})(\S*)?$/)
-        # doptat se na volání protože to nebude fungovat s self.
-        redirectedUrl = fetch(url)
-        redirect = !!(redirectedUrl =~ /^(?:http:\/\/|https:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){6,11})(\S*)?$/)
-        valid || redirect
+        !!(url =~ /^(?:http:\/\/|https:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){6,11})(\S*)?$/)
       end
 
       # initialize
@@ -72,6 +68,8 @@ module Narra
       # returns @youtube (json object)
       def initialize(url)
         # all description from YouTube API
+        url = self.fetch(url)
+        url = self.fetch(url)
         pom = url.split('v=')
         @videoid = pom[1].split('&')[0]
         uri = URI("https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet,statistics,contentDetails,status")
@@ -131,6 +129,8 @@ module Narra
         @definition = my_hash["items"][0]["contentDetails"]["definition"]
         #caption
         @caption = my_hash["items"][0]["contentDetails"]["caption"]
+        #time when the metadata were added
+        @time = Time.now.getutc
 
         data = Array[ {name:'channelId', value:"#{@channelId}"},
                       {name:'channelTitle', value:"#{@channelTitle}"},
@@ -146,7 +146,8 @@ module Narra
                       {name:'duration', value:"#{@duration}"},
                       {name:'dimension', value:"#{@dimension}"},
                       {name:'definition', value:"#{@definition}"},
-                      {name:'caption', value:"#{@caption}"}
+                      {name:'caption', value:"#{@caption}"},
+                      {name:'timestamp', value:"#{@time}"}
         ]
       end
 
