@@ -166,6 +166,17 @@ module Narra
         "https://www.youtube.com/v/#{@videoid}"
       end
 
+      # download_url
+      # params: none; must be called after valid? and initialize
+      # returns URL for downloading video; login required!!
+      def download_captions
+        raise StandardError, 'This video has no title' if @caption == "false"
+        rescue StandardError => e
+          raise StandardError, 'This video has no title'
+        else
+          "https://www.googleapis.com/youtube/v3/captions/#{@videoid}"
+      end
+
     end
   end
 end

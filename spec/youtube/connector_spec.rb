@@ -23,9 +23,7 @@ require 'spec_helper'
 
 describe Narra::Youtube::Connector do
   before(:each) do
-    # test url
     @url = 'https://www.youtube.com/watch?v=qM9f01YYDJ4'
-  #  @test1 = Narra::Youtube::Connector.new(@url)
   end
 
   it 'can be instantiated' do
@@ -38,22 +36,18 @@ describe Narra::Youtube::Connector do
     expect(Narra::Youtube::Connector.description).to match('Allows NARRA to connects to the YouTube sources')
   end
 
-  it 'should validate url' do    # tohle nejde kvůli zakomentovanému self
+  it 'should validate url' do
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=qM9f01YYDJ4')).to match(true)
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?f=qM9f01YYDJ4')).to match(false)
     expect(Narra::Youtube::Connector.valid?('www.youtube.com/watch?v=tDyeiePort0')).to match(true)
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=tDyeiePort0&spfreload=10')).to match(true)
-    expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=qM9f01YYDJ4asdasdasdadasdasdasdasdaasdasdad')).to match(true) #redirect na spravnou
+    expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=qM9f01YYDJ4asdasdasdadasdasdasdasdaasdasdad')).to match(true) #redirect to good url
     expect { Narra::Youtube::Connector.valid?('www.youtube.com/watchv=tDyeiePort0') }.to raise_error
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?vtDyeiePort0')).to match(false)
-    expect(Narra::Youtube::Connector.valid?('http://www.youtube.com/watch?v=tDyeiePort0')).to match(true)    #redirect https://
+    expect(Narra::Youtube::Connector.valid?('http://www.youtube.com/watch?v=tDyeiePort0')).to match(true)    #redirect to https://
     expect {Narra::Youtube::Connector.valid?('https:www.youtube.youtu.be.com/watch?v=tDyeiePort0')}.to raise_error
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=2gz3DSiSymE&feature=iv&src_vid=VxlQ2gqiZ7k&annotation_id=annotation_620965849')).to match(true)
   end
-
-  # it 'should validate non self url' do
-  #   expect(@test1.valid?(@url)).to match(true)
-  # end
 end
 
 
@@ -64,17 +58,20 @@ describe 'object_youtube_connector' do
     @test2 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=2ndeBBsQZqQ")
     @test3 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=U0jH2-VF00Y")
     @test4 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=2gz3DSiSymE&feature=iv&src_vid=VxlQ2gqiZ7k&annotation_id=annotation_620965849")
+    @test5 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=ZDeyFnVkThA")
     # jak z  {name:'channelId', value:'#{@channelId}'},
     # udělat {'channelId'=>'#{@channelId}'}
     @data = {}
     @data1 = {}
     @data2 = {}
     @data3 = {}
+    @data4 = {}
     @time = Time.now.getutc
     @test1.metadata.each { |i| @data[i[:name]] = i[:value] }
     @test2.metadata.each { |i| @data1[i[:name]] = i[:value] }
     @test3.metadata.each { |i| @data2[i[:name]] = i[:value] }
     @test4.metadata.each { |i| @data3[i[:name]] = i[:value] }
+    @test5.metadata.each { |i| @data4[i[:name]] = i[:value] }
   end
 
   it 'test mrk video test1' do
@@ -177,7 +174,7 @@ describe 'object_youtube_connector' do
     #test viewCount
     #expect(@data3['viewCount']).to match('13302')
     #test likeCount
-    expect(@data3['likeCount']).to match('277')
+    expect(@data3['likeCount']).to match('280')
     #test dislikeCount
     expect(@data3['dislikeCount']).to match('4')
     #test favouriteCount
@@ -194,9 +191,34 @@ describe 'object_youtube_connector' do
     expect(@data3['caption']).to match('false')
   end
 
+  it 'test mrk video with captions' do
+    expect(@test5.name).to match('Záměrně nedokonalá kaprařina (CZ, ENG subtitles)')
+    expect(@test5.type).to match(:video)
+    expect(@test5.metadata).to be_instance_of(Array)
+    #test caption
+    expect(@data4['caption']).to match("true")
+  end
+
   it 'should check timestamp' do
     expect(@data3['timestamp']).to match("#{@time}")
   end
+
+  it 'should check download video' do
+    expect(@test1.download_url).to match("https://www.youtube.com/v/x4NuGigXSmw")
+    expect(@test2.download_url).to match("https://www.youtube.com/v/2ndeBBsQZqQ")
+    expect(@test3.download_url).to match("https://www.youtube.com/v/U0jH2-VF00Y")
+    expect(@test4.download_url).to match("https://www.youtube.com/v/2gz3DSiSymE")
+    expect(@test5.download_url).to match("https://www.youtube.com/v/ZDeyFnVkThA")
+  end
+
+  it 'should validate download captions' do
+    expect { @test1.download_captions }.to raise_error
+    expect { @test2.download_captions }.to raise_error
+    expect { @test3.download_captions }.to raise_error
+    expect { @test4.download_captions }.to raise_error
+    expect(@test5.download_captions).to match("https://www.googleapis.com/youtube/v3/captions/ZDeyFnVkThA")
+  end
+
 end
 
 
