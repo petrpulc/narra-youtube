@@ -56,7 +56,7 @@ describe 'object_youtube_connector' do
   before(:each) do
     @test1 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=x4NuGigXSmw")
     @test2 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=2ndeBBsQZqQ")
-    @test3 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=U0jH2-VF00Y")
+    @test3 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=yh2mGS4xOJA")
     @test4 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=2gz3DSiSymE&feature=iv&src_vid=VxlQ2gqiZ7k&annotation_id=annotation_620965849")
     @test5 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=ZDeyFnVkThA")
     # jak z  {name:'channelId', value:'#{@channelId}'},
@@ -109,6 +109,16 @@ describe 'object_youtube_connector' do
     expect(@data['definition']).to match('hd')
     #test caption
     expect(@data['caption']).to match('false')
+    #test privacyStatus
+    expect(@data['privacyStatus']).to match('public')
+    #test licence
+    expect(@data['license']).to match('youtube')
+    #test embeddable
+    expect(@data['embeddable']).to match('true')
+    #test publicStatsViewable
+    expect(@data['publicStatsViewable']).to match('true')
+    #test timestamp
+    expect(@data['timestamp']).to match("#{@time}")
   end
 
 
@@ -147,12 +157,26 @@ describe 'object_youtube_connector' do
     expect(@data1['definition']).to match('hd')
     #test caption
     expect(@data1['caption']).to match('false')
+    #test privacyStatus
+    expect(@data1['privacyStatus']).to match('public')
+    #test licence
+    expect(@data1['license']).to match('youtube')
+    #test embeddable
+    expect(@data1['embeddable']).to match('true')
+    #test publicStatsViewable
+    expect(@data1['publicStatsViewable']).to match('false')
+    #test timestamp
+    expect(@data1['timestamp']).to match("#{@time}")
   end
 
-  it 'test description' do
-    expect(@data2['description']).to match('I do not own this video. Nevlastním toto video. Majitel je TV Nova.')
-  end
+  it 'test Kanalgratis video test2' do
+    expect(@test3.name).to match('2015 Transmoto 12-hour - KTM Australia.')
+    expect(@test3.type).to match(:video)
+    expect(@test3.metadata).to be_instance_of(Array)
 
+    #test caption
+    expect(@data2['caption']).to match('false')
+  end
 
   it 'test Meddesuncut video test3' do
     expect(@test4.name).to match('Kawasaki zx-10r vs Honda cbr 1000 rr | RAW VIDEO" to match "Kanalgratis Live - Danish Record Pike 21,1 kg, 46lb 8oz - Interview with Finn Sloth Hansen')
@@ -189,6 +213,16 @@ describe 'object_youtube_connector' do
     expect(@data3['definition']).to match('hd')
     #test caption
     expect(@data3['caption']).to match('false')
+    #test privacyStatus
+    expect(@data3['privacyStatus']).to match('public')
+    #test licence
+    expect(@data3['license']).to match('youtube')
+    #test embeddable
+    expect(@data3['embeddable']).to match('true')
+    #test publicStatsViewable
+    expect(@data3['publicStatsViewable']).to match('true')
+    #test timestamp
+    expect(@data3['timestamp']).to match("#{@time}")
   end
 
   it 'test mrk video with captions' do
@@ -197,6 +231,16 @@ describe 'object_youtube_connector' do
     expect(@test5.metadata).to be_instance_of(Array)
     #test caption
     expect(@data4['caption']).to match("true")
+    #test privacyStatus
+    expect(@data4['privacyStatus']).to match('public')
+    #test licence
+    expect(@data4['license']).to match('youtube')
+    #test embeddable
+    expect(@data4['embeddable']).to match('true')
+    #test publicStatsViewable
+    expect(@data4['publicStatsViewable']).to match('false')
+    #test timestamp
+    expect(@data4['timestamp']).to match("#{@time}")
   end
 
   it 'should check timestamp' do
@@ -206,7 +250,7 @@ describe 'object_youtube_connector' do
   it 'should check download video' do
     expect(@test1.download_url).to match("https://www.youtube.com/v/x4NuGigXSmw")
     expect(@test2.download_url).to match("https://www.youtube.com/v/2ndeBBsQZqQ")
-    expect(@test3.download_url).to match("https://www.youtube.com/v/U0jH2-VF00Y")
+    expect(@test3.download_url).to match("https://www.youtube.com/v/yh2mGS4xOJA")
     expect(@test4.download_url).to match("https://www.youtube.com/v/2gz3DSiSymE")
     expect(@test5.download_url).to match("https://www.youtube.com/v/ZDeyFnVkThA")
   end

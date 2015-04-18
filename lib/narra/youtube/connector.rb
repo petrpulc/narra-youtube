@@ -105,6 +105,7 @@ module Narra
       # returns Array
       def metadata
         my_hash = JSON.parse(@youtube)
+        # snippet part
         #channelId
         @channelId = my_hash["items"][0]["snippet"]["channelId"]
         #channelTitle
@@ -119,6 +120,8 @@ module Narra
         @categoryId = my_hash["items"][0]["snippet"]["categoryId"]
         #liveBroadcastContent
         @liveBroadcastContent = my_hash["items"][0]["snippet"]["liveBroadcastContent"]
+
+        # statistics part
         #viewCount
         @viewCount = my_hash["items"][0]["statistics"]["viewCount"]
         #likeCount
@@ -129,6 +132,8 @@ module Narra
         @favoriteCount = my_hash["items"][0]["statistics"]["favouriteCount"]
         #commentCount
         @commentCount = my_hash["items"][0]["statistics"]["commentCount"]
+
+        # content details part
         #duration
         @duration = my_hash["items"][0]["contentDetails"]["duration"]
         #dimension
@@ -137,6 +142,14 @@ module Narra
         @definition = my_hash["items"][0]["contentDetails"]["definition"]
         #caption
         @caption = my_hash["items"][0]["contentDetails"]["caption"]
+
+        # status part
+        @uploadStatus = my_hash["items"][0]["status"]["processed"]
+        @privacyStatus = my_hash["items"][0]["status"]["privacyStatus"]
+        @license = my_hash["items"][0]["status"]["license"]
+        @embeddable = my_hash["items"][0]["status"]["embeddable"]
+        @publicStatsViewable = my_hash["items"][0]["status"]["publicStatsViewable"]
+
         #time when the metadata were added
         @time = Time.now.getutc
 
@@ -155,6 +168,11 @@ module Narra
                       {name:'dimension', value:"#{@dimension}"},
                       {name:'definition', value:"#{@definition}"},
                       {name:'caption', value:"#{@caption}"},
+                      {name: 'uploadStatus', value:"#{@uploadStatus}"},
+                      {name: 'privacyStatus', value:"#{@privacyStatus}"},
+                      {name: 'license', value:"#{@license}"},
+                      {name: 'embeddable', value:"#{@embeddable}"},
+                      {name: 'publicStatsViewable', value:"#{@publicStatsViewable}"},
                       {name:'timestamp', value:"#{@time}"}
         ]
       end
