@@ -181,7 +181,11 @@ module Narra
       # params: none; must be called after valid? and initialize
       # returns URL for video stream
       def download_url
-        "https://www.youtube.com/v/#{@videoid}"
+        raise StandardError, 'Non existing video passed' if @videoid == nil
+        rescue StandardError => e
+          raise StandardError, 'Non existing video passed'
+        else
+          "https://www.youtube.com/v/#{@videoid}"
       end
 
       # download_url
