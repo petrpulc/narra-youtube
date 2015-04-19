@@ -59,6 +59,7 @@ describe 'object_youtube_connector' do
     @test3 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=yh2mGS4xOJA")
     @test4 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=2gz3DSiSymE&feature=iv&src_vid=VxlQ2gqiZ7k&annotation_id=annotation_620965849")
     @test5 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=ZDeyFnVkThA")
+    @test6 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=_XqFYHKzilk")
     # jak z  {name:'channelId', value:'#{@channelId}'},
     # udělat {'channelId'=>'#{@channelId}'}
     @data = {}
@@ -66,12 +67,14 @@ describe 'object_youtube_connector' do
     @data2 = {}
     @data3 = {}
     @data4 = {}
+    @data5 = {}
     @time = Time.now.getutc
     @test1.metadata.each { |i| @data[i[:name]] = i[:value] }
     @test2.metadata.each { |i| @data1[i[:name]] = i[:value] }
     @test3.metadata.each { |i| @data2[i[:name]] = i[:value] }
     @test4.metadata.each { |i| @data3[i[:name]] = i[:value] }
     @test5.metadata.each { |i| @data4[i[:name]] = i[:value] }
+    @test6.metadata.each { |i| @data4[i[:name]] = i[:value] }
   end
 
   it 'test mrk video test1' do
@@ -263,6 +266,11 @@ describe 'object_youtube_connector' do
     expect { @test3.download_captions }.to raise_error
     expect { @test4.download_captions }.to raise_error
     expect(@test5.download_captions).to match("https://www.googleapis.com/youtube/v3/captions/ZDeyFnVkThA")
+  end
+
+  it 'should validate licensedContent and region restriction' do
+    expect(@data5['licensedContent']).to match('false')
+    expect(@data5['regionRestriction']).to match('DE')
   end
 
 end

@@ -154,6 +154,10 @@ module Narra
         @definition = my_hash["items"][0]["contentDetails"]["definition"]
         #caption
         @caption = my_hash["items"][0]["contentDetails"]["caption"]
+        #licensedContent
+        @licensedContent = my_hash["items"][0]["contentDetails"]["licensedContent"]
+        #regionRestriction
+        @regionRestriction = my_hash["items"][0]["contentDetails"]["licensedContent"]["blocked"][0]
 
         # status part
         @uploadStatus = my_hash["items"][0]["status"]["processed"]
@@ -181,11 +185,13 @@ module Narra
                       {name:'dimension', value:"#{@dimension}"},
                       {name:'definition', value:"#{@definition}"},
                       {name:'caption', value:"#{@caption}"},
-                      {name: 'uploadStatus', value:"#{@uploadStatus}"},
-                      {name: 'privacyStatus', value:"#{@privacyStatus}"},
-                      {name: 'license', value:"#{@license}"},
-                      {name: 'embeddable', value:"#{@embeddable}"},
-                      {name: 'publicStatsViewable', value:"#{@publicStatsViewable}"},
+                      {name:'licensedContent', value:"#{@licensedContent}"},
+                      {name:'regionRestriction', value:"#{@regionRestriction}"},
+                      {name:'uploadStatus', value:"#{@uploadStatus}"},
+                      {name:'privacyStatus', value:"#{@privacyStatus}"},
+                      {name:'license', value:"#{@license}"},
+                      {name:'embeddable', value:"#{@embeddable}"},
+                      {name:'publicStatsViewable', value:"#{@publicStatsViewable}"},
                       {name:'timestamp', value:"#{@time}"}
         ]
       end
