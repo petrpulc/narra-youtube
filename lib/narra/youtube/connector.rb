@@ -157,13 +157,18 @@ module Narra
         #licensedContent
         @licensedContent = my_hash["items"][0]["contentDetails"]["licensedContent"]
         #regionRestriction
-        @regionRestriction = my_hash["items"][0]["contentDetails"]["licensedContent"]["blocked"][0]
-
+        #@regionRestriction = my_hash["items"][0]["contentDetails"]["licensedContent"]["blocked"][0]
+        @regionRestriction = my_hash["items"][0]["contentDetails"]["regionRestriction"]
         # status part
+        #uploadStatus
         @uploadStatus = my_hash["items"][0]["status"]["processed"]
+        #privacyStatus
         @privacyStatus = my_hash["items"][0]["status"]["privacyStatus"]
+        #licence
         @license = my_hash["items"][0]["status"]["license"]
+        #embeddable
         @embeddable = my_hash["items"][0]["status"]["embeddable"]
+        #publicStatsViewable
         @publicStatsViewable = my_hash["items"][0]["status"]["publicStatsViewable"]
 
         #time when the metadata were added

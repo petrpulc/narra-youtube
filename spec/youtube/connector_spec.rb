@@ -53,7 +53,7 @@ end
 
 describe 'object_youtube_connector' do
 
-  before(:each) do
+  before(:all) do
     @test1 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=x4NuGigXSmw")
     @test2 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=2ndeBBsQZqQ")
     @test3 = Narra::Youtube::Connector.new("https://www.youtube.com/watch?v=yh2mGS4xOJA")
@@ -74,7 +74,7 @@ describe 'object_youtube_connector' do
     @test3.metadata.each { |i| @data2[i[:name]] = i[:value] }
     @test4.metadata.each { |i| @data3[i[:name]] = i[:value] }
     @test5.metadata.each { |i| @data4[i[:name]] = i[:value] }
-    @test6.metadata.each { |i| @data4[i[:name]] = i[:value] }
+    @test6.metadata.each { |i| @data5[i[:name]] = i[:value] }
   end
 
   it 'test mrk video test1' do
@@ -270,7 +270,7 @@ describe 'object_youtube_connector' do
 
   it 'should validate licensedContent and region restriction' do
     expect(@data5['licensedContent']).to match('false')
-    expect(@data5['regionRestriction']).to match('DE')
+    expect(@data5['regionRestriction']).to match('{"blocked"=>["DE"]}')
   end
 
 end
