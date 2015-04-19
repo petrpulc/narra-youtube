@@ -79,6 +79,8 @@ describe 'object_youtube_connector' do
     expect(@test1.type).to match(:video)
     expect(@test1.metadata).to be_instance_of(Array)
 
+    #test videoid
+    expect(@data['videoId']).to match('x4NuGigXSmw')
     #test channelId
     expect(@data['channelId']).to match('UCKfMsmWq9cPBAuFLlff-rCA')
     #test channelTitle

@@ -72,15 +72,27 @@ module Narra
         !!(url =~ /^(?:http:\/\/|https:\/\/)?(www\.)?(youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){6,11})(\S*)?$/)
       end
 
+      # getId
+      # params: url (string)
+      # returns @videoid (string)
+      def getId(url)
+        pom = url.split('v=')
+        pom[1].split('&')[0]
+      end
+
       # initialize
       # params: url (string)
       # returns @youtube (json object)
-      def initialize(url)
+      def initialize(url, key = '')
+        unless key != ''
+            @mykey = "AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU"
+          else
+            @mykey = key
+        end
         # all description from YouTube API
         url = self.class.fetch(url)
-        pom = url.split('v=')
-        @videoid = pom[1].split('&')[0]
-        uri = URI("https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU&part=snippet,statistics,contentDetails,status")
+        @videoid = getId(url)
+        uri = URI("https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=#{@mykey}&part=snippet,statistics,contentDetails,status")
         @youtube = Net::HTTP.get(uri)
       end
 
@@ -153,7 +165,8 @@ module Narra
         #time when the metadata were added
         @time = Time.now.getutc
 
-        data = Array[ {name:'channelId', value:"#{@channelId}"},
+        data = Array[ {name:'videoId', value:"#{@videoid}"},
+                      {name:'channelId', value:"#{@channelId}"},
                       {name:'channelTitle', value:"#{@channelTitle}"},
                       {name:'publishedAt', value:"#{@publishedAt}"},
                       {name:'description', value:"#{@my_description}"},
