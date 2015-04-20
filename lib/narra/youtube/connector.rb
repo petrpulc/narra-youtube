@@ -157,7 +157,6 @@ module Narra
         #licensedContent
         @licensedContent = my_hash["items"][0]["contentDetails"]["licensedContent"]
         #regionRestriction
-        #@regionRestriction = my_hash["items"][0]["contentDetails"]["licensedContent"]["blocked"][0]
         @regionRestriction = my_hash["items"][0]["contentDetails"]["regionRestriction"]
         # status part
         #uploadStatus
