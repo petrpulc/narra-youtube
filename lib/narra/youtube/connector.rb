@@ -85,15 +85,16 @@ module Narra
       # returns @youtube (json object)
       def initialize(url, key = '')
         unless key != ''
-            @mykey = "AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU"
-          else
-            @mykey = key
+          @mykey = "AIzaSyBVYtP85g7VCilGKbzkQqPCf8CxokAfvhU"
+        else
+          @mykey = key
         end
         # all description from YouTube API
         url = self.class.fetch(url)
         @videoid = getId(url)
         uri = URI("https://www.googleapis.com/youtube/v3/videos?id=#{@videoid}&key=#{@mykey}&part=snippet,statistics,contentDetails,status")
         @youtube = Net::HTTP.get(uri)
+        @my_hash = JSON.parse(@youtube)["items"][0]
       end
 
       # name
@@ -101,8 +102,7 @@ module Narra
       # returns name of video
       def name
         # jmeno video na youtube | title
-        my_hash = JSON.parse(@youtube)
-        my_hash["items"][0]["snippet"]["title"]
+        @my_hash["snippet"]["title"]
       end
 
       # type
@@ -116,60 +116,61 @@ module Narra
       # params: none
       # returns Array
       def metadata
-        my_hash = JSON.parse(@youtube)
+
         # snippet part
         #channelId
-        @channelId = my_hash["items"][0]["snippet"]["channelId"]
+        @channelId = @my_hash["snippet"]["channelId"]
         #channelTitle
-        @channelTitle = my_hash["items"][0]["snippet"]["channelTitle"]
+        @channelTitle = @my_hash["snippet"]["channelTitle"]
         #id
-        @id = my_hash["items"][0]["snippet"]["id"]
+        @id = @my_hash["snippet"]["id"]
         #publishedAt
-        @publishedAt = my_hash["items"][0]["snippet"]["publishedAt"]
+        @publishedAt = @my_hash["snippet"]["publishedAt"]
         #description
-        @my_description = my_hash["items"][0]["snippet"]["description"]
+        @my_description = @my_hash["snippet"]["description"]
         #categoryId
-        @categoryId = my_hash["items"][0]["snippet"]["categoryId"]
+        @categoryId = @my_hash["snippet"]["categoryId"]
         #liveBroadcastContent
-        @liveBroadcastContent = my_hash["items"][0]["snippet"]["liveBroadcastContent"]
+        @liveBroadcastContent = @my_hash["snippet"]["liveBroadcastContent"]
 
         # statistics part
         #viewCount
-        @viewCount = my_hash["items"][0]["statistics"]["viewCount"]
+        @viewCount = @my_hash["statistics"]["viewCount"]
         #likeCount
-        @likeCount = my_hash["items"][0]["statistics"]["likeCount"]
+        @likeCount = @my_hash["statistics"]["likeCount"]
         #dislikeCount
-        @dislikeCount = my_hash["items"][0]["statistics"]["dislikeCount"]
+        @dislikeCount = @my_hash["statistics"]["dislikeCount"]
         #favouriteCount
-        @favoriteCount = my_hash["items"][0]["statistics"]["favouriteCount"]
+        @favoriteCount = @my_hash["statistics"]["favouriteCount"]
         #commentCount
-        @commentCount = my_hash["items"][0]["statistics"]["commentCount"]
+        @commentCount = @my_hash["statistics"]["commentCount"]
 
         # content details part
         #duration
-        @duration = my_hash["items"][0]["contentDetails"]["duration"]
+        @duration = @my_hash["contentDetails"]["duration"]
         #dimension
-        @dimension = my_hash["items"][0]["contentDetails"]["dimension"]
+        @dimension = @my_hash["contentDetails"]["dimension"]
         #definition
-        @definition = my_hash["items"][0]["contentDetails"]["definition"]
+        @definition = @my_hash["contentDetails"]["definition"]
         #caption
-        @caption = my_hash["items"][0]["contentDetails"]["caption"]
+        @caption = @my_hash["contentDetails"]["caption"]
         #licensedContent
-        @licensedContent = my_hash["items"][0]["contentDetails"]["licensedContent"]
+        @licensedContent = @my_hash["contentDetails"]["licensedContent"]
         #regionRestriction
-        @regionRestriction = my_hash["items"][0]["contentDetails"]["regionRestriction"]
+        @regionRestriction = @my_hash["contentDetails"]["regionRestriction"]
         @blockedIn = @regionRestriction["blocked"] unless @regionRestriction.nil?
+        
         # status part
         #uploadStatus
-        @uploadStatus = my_hash["items"][0]["status"]["processed"]
+        @uploadStatus = @my_hash["status"]["processed"]
         #privacyStatus
-        @privacyStatus = my_hash["items"][0]["status"]["privacyStatus"]
+        @privacyStatus = @my_hash["status"]["privacyStatus"]
         #licence
-        @license = my_hash["items"][0]["status"]["license"]
+        @license = @my_hash["status"]["license"]
         #embeddable
-        @embeddable = my_hash["items"][0]["status"]["embeddable"]
+        @embeddable = @my_hash["status"]["embeddable"]
         #publicStatsViewable
-        @publicStatsViewable = my_hash["items"][0]["status"]["publicStatsViewable"]
+        @publicStatsViewable = @my_hash["status"]["publicStatsViewable"]
 
         #time when the metadata were added
         @time = Time.now.getutc
@@ -207,10 +208,10 @@ module Narra
       # returns URL for video stream
       def download_url
         raise StandardError, 'Non existing video passed' if @videoid == nil
-        rescue StandardError => e
-          raise StandardError, 'Non existing video passed'
-        else
-          "https://www.youtube.com/v/#{@videoid}"
+      rescue StandardError => e
+        raise StandardError, 'Non existing video passed'
+      else
+        "https://www.youtube.com/v/#{@videoid}"
       end
 
       # download_url
@@ -218,10 +219,10 @@ module Narra
       # returns URL for downloading video; login required!!
       def download_captions
         raise StandardError, 'This video has no title' if @caption == "false"
-        rescue StandardError => e
-          raise StandardError, 'This video has no title'
-        else
-          "https://www.googleapis.com/youtube/v3/captions/#{@videoid}"
+      rescue StandardError => e
+        raise StandardError, 'This video has no title'
+      else
+        "https://www.googleapis.com/youtube/v3/captions/#{@videoid}"
       end
 
     end
