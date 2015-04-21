@@ -159,7 +159,7 @@ module Narra
         #regionRestriction
         @regionRestriction = @my_hash["contentDetails"]["regionRestriction"]
         @blockedIn = @regionRestriction["blocked"] unless @regionRestriction.nil?
-        
+
         # status part
         #uploadStatus
         @uploadStatus = @my_hash["status"]["processed"]

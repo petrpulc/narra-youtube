@@ -48,6 +48,8 @@ describe Narra::Youtube::Connector do
     expect {Narra::Youtube::Connector.valid?('https:www.youtube.youtu.be.com/watch?v=tDyeiePort0')}.to raise_error
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?v=2gz3DSiSymE&feature=iv&src_vid=VxlQ2gqiZ7k&annotation_id=annotation_620965849')).to match(true)
     expect(Narra::Youtube::Connector.valid?('https://www.youtube.com/watch?t=12&v=Hw6_jEmVnN8')).to match(true)
+    expect(Narra::Youtube::Connector.valid?('https://youtu.be/gfM1H3qW9WE')).to match(true)
+    expect(Narra::Youtube::Connector.valid?('http://1url.cz/Fvoy')).to match(true)
   end
 end
 
@@ -175,17 +177,18 @@ describe 'object_youtube_connector' do
     expect(@data1['timestamp']).to match("#{@time}")
   end
 
-  it 'test Kanalgratis video test2' do
+  it 'test moto video captions video test3' do
     expect(@test3.name).to match('2015 Transmoto 12-hour - KTM Australia.')
     expect(@test3.type).to match(:video)
     expect(@test3.metadata).to be_instance_of(Array)
 
     #test caption
     expect(@data2['caption']).to match('false')
+    expect {@test3.download_captions}.to raise_error
   end
 
-  it 'test Meddesuncut video test3' do
-    expect(@test4.name).to match('Kawasaki zx-10r vs Honda cbr 1000 rr | RAW VIDEO" to match "Kanalgratis Live - Danish Record Pike 21,1 kg, 46lb 8oz - Interview with Finn Sloth Hansen')
+  it 'test Meddesuncut video test4' do
+    expect(@test4.name).to match('Kawasaki zx-10r vs Honda cbr 1000 rr | RAW VIDEO')
     expect(@test4.type).to match(:video)
     expect(@test4.metadata).to be_instance_of(Array)
 
@@ -247,6 +250,8 @@ describe 'object_youtube_connector' do
     expect(@data4['publicStatsViewable']).to match('false')
     #test timestamp
     expect(@data4['timestamp']).to match("#{@time}")
+    #download subtitles
+    expect(@test5.download_captions).to match('https://www.googleapis.com/youtube/v3/captions/ZDeyFnVkThA')
   end
 
   it 'should check timestamp' do
@@ -273,9 +278,10 @@ describe 'object_youtube_connector' do
     expect(@data5['licensedContent']).to match('false')
     expect(@data5['regionRestriction']).to match('{"blocked"=>["DE"]}')
     expect(@data5['blockedIn']).to match('["DE"]')
+    #test if no restriction is set
+    expect(@data4['licensedContent']).to match('true')
+    expect(@data4['regionRestriction']).to match('')
+    expect(@data4['blockedIn']).to match('')
   end
 
 end
-
-
-
