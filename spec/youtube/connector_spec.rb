@@ -22,7 +22,7 @@
 require 'spec_helper'
 
 describe Narra::Youtube::Connector do
-  before(:each) do
+  before(:all) do
     @url = 'https://www.youtube.com/watch?v=qM9f01YYDJ4'
   end
 
@@ -204,7 +204,7 @@ describe 'object_youtube_connector' do
     #test viewCount
     #expect(@data3['viewCount']).to match('13302')
     #test likeCount
-    expect(@data3['likeCount']).to match('281')
+    expect(@data3['likeCount']).to match('282')
     #test dislikeCount
     expect(@data3['dislikeCount']).to match('4')
     #test favouriteCount
@@ -272,6 +272,7 @@ describe 'object_youtube_connector' do
   it 'should validate licensedContent and region restriction' do
     expect(@data5['licensedContent']).to match('false')
     expect(@data5['regionRestriction']).to match('{"blocked"=>["DE"]}')
+    expect(@data5['blockedIn']).to match('["DE"]')
   end
 
 end

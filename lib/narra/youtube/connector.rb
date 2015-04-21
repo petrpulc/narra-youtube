@@ -158,6 +158,7 @@ module Narra
         @licensedContent = my_hash["items"][0]["contentDetails"]["licensedContent"]
         #regionRestriction
         @regionRestriction = my_hash["items"][0]["contentDetails"]["regionRestriction"]
+        @blockedIn = @regionRestriction["blocked"] unless @regionRestriction.nil?
         # status part
         #uploadStatus
         @uploadStatus = my_hash["items"][0]["status"]["processed"]
@@ -191,6 +192,7 @@ module Narra
                       {name:'caption', value:"#{@caption}"},
                       {name:'licensedContent', value:"#{@licensedContent}"},
                       {name:'regionRestriction', value:"#{@regionRestriction}"},
+                      {name:'blockedIn', value:"#{@blockedIn}"},
                       {name:'uploadStatus', value:"#{@uploadStatus}"},
                       {name:'privacyStatus', value:"#{@privacyStatus}"},
                       {name:'license', value:"#{@license}"},
