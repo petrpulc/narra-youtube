@@ -212,7 +212,7 @@ module Narra
       rescue StandardError => e
         raise StandardError, 'Non existing video passed'
       else
-        "#{env}/?youtube_dl&id=#{@videoid}"
+        "#{env}/youtube_dl?id=#{@videoid}"
       end
 
       # download_url
