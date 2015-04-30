@@ -175,32 +175,33 @@ module Narra
         #time when the metadata were added
         @time = Time.now.getutc
 
-        data = Array[ {name:'videoId', value:"#{@videoid}"},
-                      {name:'channelId', value:"#{@channelId}"},
-                      {name:'channelTitle', value:"#{@channelTitle}"},
-                      {name:'publishedAt', value:"#{@publishedAt}"},
-                      {name:'description', value:"#{@my_description}"},
-                      {name:'categoryId', value:"#{@categoryId}"},
-                      {name:'liveBroadcastContent', value:"#{@liveBroadcastContent}"},
-                      {name:'viewCount', value:"#{@viewCount}"},
-                      {name:'likeCount', value:"#{@likeCount}"},
-                      {name:'dislikeCount', value:"#{@dislikeCount}"},
-                      {name:'favouriteCount', value:"#{@favouriteCount}"},
-                      {name:'commentCount', value:"#{@commentCount}"},
-                      {name:'duration', value:"#{@duration}"},
-                      {name:'dimension', value:"#{@dimension}"},
-                      {name:'definition', value:"#{@definition}"},
-                      {name:'caption', value:"#{@caption}"},
-                      {name:'licensedContent', value:"#{@licensedContent}"},
-                      {name:'regionRestriction', value:"#{@regionRestriction}"},
-                      {name:'blockedIn', value:"#{@blockedIn}"},
-                      {name:'uploadStatus', value:"#{@uploadStatus}"},
-                      {name:'privacyStatus', value:"#{@privacyStatus}"},
-                      {name:'license', value:"#{@license}"},
-                      {name:'embeddable', value:"#{@embeddable}"},
-                      {name:'publicStatsViewable', value:"#{@publicStatsViewable}"},
-                      {name:'timestamp', value:"#{@time}"}
-        ]
+        data = []
+        
+        data << {name:'videoId', value:"#{@videoid}"}
+        data << {name:'channelId', value:"#{@channelId}"}
+        data << {name:'channelTitle', value:"#{@channelTitle}"}
+        data << {name:'publishedAt', value:"#{@publishedAt}"}
+        data << {name:'description', value:"#{@my_description}"} unless "#{@my_description}".empty?
+        data << {name:'categoryId', value:"#{@categoryId}"} unless "#{@categoryId}".empty?
+        data << {name:'liveBroadcastContent', value:"#{@liveBroadcastContent}"}
+        data << {name:'viewCount', value:"#{@viewCount}"}
+        data << {name:'likeCount', value:"#{@likeCount}"}
+        data << {name:'dislikeCount', value:"#{@dislikeCount}"}
+        data << {name:'favouriteCount', value:"#{@favouriteCount}"} unless "#{@favouriteCount}".empty?
+        data << {name:'commentCount', value:"#{@commentCount}"}
+        data << {name:'duration', value:"#{@duration}"}
+        data << {name:'dimension', value:"#{@dimension}"}
+        data << {name:'definition', value:"#{@definition}"}
+        data << {name:'caption', value:"#{@caption}"}
+        data << {name:'licensedContent', value:"#{@licensedContent}"}
+        data << {name:'regionRestriction', value:"#{@regionRestriction}"} unless "#{@regionRestriction}".empty?
+        data << {name:'blockedIn', value:"#{@blockedIn}"} unless "#{@blockedIn}".empty?
+        data << {name:'uploadStatus', value:"#{@uploadStatus}"} unless "#{@uploadStatus}".empty?
+        data << {name:'privacyStatus', value:"#{@privacyStatus}"}
+        data << {name:'license', value:"#{@license}"}
+        data << {name:'embeddable', value:"#{@embeddable}"}
+        data << {name:'publicStatsViewable', value:"#{@publicStatsViewable}"}
+        data << {name:'timestamp', value:"#{@time}"}
       end
 
       # download_url
